@@ -1,0 +1,90 @@
+nav{
+
+  margin: 0 auto;
+
+}
+nav ul {
+  text-align: center;
+  position: center;
+}
+nav ul li {
+  display: inline-block;
+}
+nav ul li a {
+  padding: 18px; 
+  background-color: b;
+  text-transform:uppercase;
+  color: rgba(0, 0, 0, 1);
+  font-size: 18px;
+  text-decoration: none;
+  display: block;
+}
+nav ul li a:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3), inset 0 0 1px rgba(255, 255, 255, 0.3);
+  color: rgba(0, 0, 0, 1);
+}
+menu{
+  float:left; 
+  list-style-type:none;
+   margin:0 0 1em;
+    padding:8px 0 0 10px; 
+    white-space:nowrap;
+    width:100%;
+}
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+.dropdown{
+  position : relative;
+  display : inline-block;
+}
+
+.dropbtn_icon{
+  font-family : 'Material Icons';
+}
+.dropbtn{
+  border : 1px solid rgb(37, 37, 37);
+  border-radius : 4px;
+  background-color: #f5f5f5;
+  font-weight: 400;
+  color : rgb(37, 37, 37);
+  padding : 12px;
+  width :200px;
+  text-align: left;
+  cursor : pointer;
+  font-size : 12px;
+}
+.dropdown-content{
+  display : none;
+  position : absolute;
+  z-index : 1; /*다른 요소들보다 앞에 배치*/
+  font-weight: 400;
+  background-color: #f9f9f9;
+  min-width : 200px;
+}
+
+.dropdown-content a{
+  display : block;
+  text-decoration : none;
+  color : rgb(37, 37, 37);
+  font-size: 12px;
+  padding : 12px 20px;
+}
+
+.dropdown-content a:hover{
+  background-color : #ececec
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.aside {
+  display: inline;
+  width: 300px;
+  height: 500px;
+  float: left;
+}
+.submenu {
+  list-style-type: none;
+  position: right;
+  display: none;
+}

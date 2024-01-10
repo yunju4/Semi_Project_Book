@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>유저 관리 관련 쿼리문들</comment>
+
+	<entry key="selectMember">
+		SELECT * FROM MEMBER ORDER BY STATUS DESC
+	</entry>
+	
+	<entry key="delMember">
+		UPDATE MEMBER
+		SET STATUS = 'N'
+		WHERE USER_ID = ?
+	</entry>
+	
+	<entry key="backMember">
+		UPDATE MEMBER
+		SET STATUS = 'Y'
+		WHERE USER_ID = ?
+	</entry>
+	
+</properties>

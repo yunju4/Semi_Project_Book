@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>도서 관련 쿼리문들</comment>
+
+	<entry key="selectBookNo">
+		SELECT SEQ_MNO.NEXTVAL AS BOOK_NO
+		FROM DUAL
+	</entry>
+	<entry key="insertProduct">
+		INSERT INTO BOOK_MASTER(BOOK_NO, BOOK_CODE, BOOK_TITLE , BOOK_HEAD, BOOK_CONTENT, AUTHOR_INFO
+								, PRICE, AUTHOR, TITLE, SALE_COUNT, STATUS, STOCK, PBLCT_DATE, PUBLISHER)
+		VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?)
+	</entry>
+	<entry key="insertAttachment">
+		INSERT INTO ATTACHMENT(KEY, BOOK_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH, STATUS)
+		VALUES(SEQ_IMG.NEXTVAL, ?, ?, ?, ?, DEFAULT)
+	</entry>
+	<entry key="insertTag">
+		INSERT INTO BOOK_TAG(TAG_NO, TAG_CONTENT, BOOK_NO)
+		VALUES(?, ?, ?)
+	</entry>
+	<entry key="selectProduct">
+		SELECT *
+		  FROM BOOK_MASTER
+		 WHERE STATUS = 'Y'
+	</entry>
+	<entry key="selectProductDetail">
+		SELECT M.*,
+        	   (SELECT TAG_CONTENT FROM BOOK_TAG T WHERE T.BOOK_NO = M.BOOK_NO AND T.TAG_NO = 1) AS TAG1,
+        	   (SELECT TAG_CONTENT FROM BOOK_TAG T WHERE T.BOOK_NO = M.BOOK_NO AND T.TAG_NO = 2) AS TAG2
+		  FROM BOOK_MASTER M
+		 WHERE BOOK_NO = ?
+		   AND STATUS = 'Y'
+	</entry>
+	<entry key="selectAttachment">
+		SELECT KEY, ORIGIN_NAME, CHANGE_NAME, FILE_PATH
+		  FROM ATTACHMENT
+		 WHERE BOOK_NO = ?
+		   AND STATUS = 'Y'
+	</entry>
+	<entry key="updateProduct">
+		UPDATE BOOK_MASTER
+		   SET BOOK_CODE = ?
+		     , BOOK_TITLE = ?
+		     , BOOK_HEAD = ?
+		     , BOOK_CONTENT = ?
+		     , AUTHOR_INFO = ?
+			 , PRICE = ?
+			 , AUTHOR = ?
+			 , TITLE = ?
+			 , STOCK = ?
+			 , PBLCT_DATE = ?
+			 , PUBLISHER = ?
+		WHERE BOOK_NO = ?
+	</entry>
+	<entry key="updateAttachment">
+		UPDATE ATTACHMENT
+		   SET ORIGIN_NAME = ?
+			 , CHANGE_NAME = ?
+			 , FILE_PATH = ?
+		 WHERE BOOK_NO = ?
+	</entry>
+	<entry key="updateTag">
+		UPDATE BOOK_TAG
+		   SET TAG_CONTENT = ?
+		 WHERE BOOK_NO = ?
+		   AND TAG_NO = ?
+	</entry>
+	<entry key="deleteProduct">
+		UPDATE BOOK_MASTER
+		   SET STATUS = 'N'
+		 WHERE BOOK_NO = ?
+	</entry>
+	<entry key="selectBestProduct">
+		SELECT C.BOOK_NO, A.FILE_PATH, A.CHANGE_NAME, C.AUTHOR, C.TITLE, C.PRICE, C.PUBLISHER, C.PBLCT_DATE
+		  FROM (SELECT TITLE, PRICE, BOOK_NO, PUBLISHER, PBLCT_DATE, AUTHOR, STATUS
+      		    FROM BOOK_MASTER
+      		    WHERE STATUS = 'Y'
+      			ORDER BY SALE_COUNT DESC) C
+		  JOIN ATTACHMENT A ON C.BOOK_NO = A.BOOK_NO
+		 WHERE ROWNUM <![CDATA[<=]]>?
+	</entry>
+	<entry key="selectNewProduct">
+		SELECT C.BOOK_NO, A.FILE_PATH, A.CHANGE_NAME, C.AUTHOR, C.TITLE, C.PRICE, C.PUBLISHER, C.PBLCT_DATE
+		  FROM (SELECT TITLE, PRICE, BOOK_NO, PUBLISHER, PBLCT_DATE, AUTHOR, STATUS
+      		    FROM BOOK_MASTER
+      		    WHERE STATUS = 'Y'
+      			ORDER BY PBLCT_DATE DESC) C
+		  JOIN ATTACHMENT A ON C.BOOK_NO = A.BOOK_NO
+		 WHERE ROWNUM <![CDATA[<=]]>?
+		   
+	</entry>
+	<entry key="selectSearchProduct">
+		SELECT C.BOOK_NO, A.FILE_PATH, A.CHANGE_NAME, C.AUTHOR, C.TITLE, C.PRICE, C.PUBLISHER, C.PBLCT_DATE
+		  FROM (SELECT TITLE, BOOK_NO, PRICE, PUBLISHER, PBLCT_DATE, AUTHOR, STATUS
+      		    FROM BOOK_MASTER
+      		    WHERE STATUS = 'Y'
+      			ORDER BY PBLCT_DATE DESC) C
+		  JOIN ATTACHMENT A ON C.BOOK_NO = A.BOOK_NO
+		 WHERE C.TITLE LIKE '%'||?||'%'
+		  	OR C.PRICE LIKE '%'||?||'%'
+   		    OR C.AUTHOR LIKE '%'||?||'%'
+   			OR C.PBLCT_DATE LIKE '%'||?||'%'
+  			OR C.PUBLISHER LIKE '%'||?||'%'
+	</entry>
+	<entry key="selectAllProduct">
+		SELECT C.BOOK_NO, A.FILE_PATH, A.CHANGE_NAME, C.AUTHOR, C.TITLE, C.PRICE, C.PUBLISHER, C.PBLCT_DATE
+		  FROM (SELECT TITLE, BOOK_NO, PRICE, PUBLISHER, PBLCT_DATE, AUTHOR, STATUS, BOOK_CODE
+      		    FROM BOOK_MASTER
+      		    WHERE STATUS = 'Y'
+      			ORDER BY PBLCT_DATE ASC) C
+		  JOIN ATTACHMENT A ON C.BOOK_NO = A.BOOK_NO
+		 WHERE C.BOOK_CODE = ?
+	</entry>
+</properties>

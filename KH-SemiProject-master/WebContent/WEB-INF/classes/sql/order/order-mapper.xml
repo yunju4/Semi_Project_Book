@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	<entry key="checkCard">
+		SELECT CARD_COM, CARD_PWD, CNUM
+		FROM CARD
+		WHERE USER_NO = ?
+	</entry>
+
+	<entry key="insertCard">
+		INSERT INTO CARD
+		VALUES (SEQ_CARD.NEXTVAL, ?, ?, ?, ?)
+	</entry>
+
+	<entry key="insertOrder">
+		INSERT INTO BOOK_ORDER (ORDER_SEQ, BASKET_SEQ,
+		ORDER_DATE, CONFIRMATION_DATE,
+		USER_NO, STATUS)
+		VALUES
+		(SEQ_BONO.NEXTVAL, ?,
+		SYSDATE, SYSDATE + 30, ?,0)
+	</entry>
+
+	<entry key="setCount">
+		UPDATE BOOK_MASTER
+		SET STOCK = STOCK - ?
+		, SALE_COUNT =
+		SALE_COUNT + ?
+		WHERE BOOK_NO = ?
+	</entry>
+
+		<entry key="selectOrderList">
+		SELECT O.USER_NO, M.BOOK_NO, ORDER_SEQ, ORDER_DATE, M.TITLE, PRICE, COUNT, O.STATUS, O.CONFIRMATION_DATE
+		FROM BOOK_MASTER M
+		JOIN BASKET B ON (M.BOOK_NO = B.BOOK_NO)
+		JOIN
+		BOOK_ORDER O ON (B.BASKET_SEQ = O.BASKET_SEQ)
+		WHERE O.USER_NO = ?
+		AND
+		O.STATUS IN(0,1) ORDER BY
+		ORDER_DATE DESC, O.STATUS
+
+	</entry>
+
+	<entry key="searchOrderList">
+		SELECT O.USER_NO, M.BOOK_NO, ORDER_SEQ, ORDER_DATE, M.TITLE, PRICE, COUNT, O.STATUS, O.CONFIRMATION_DATE
+		FROM BOOK_MASTER M
+		JOIN BASKET B ON (M.BOOK_NO = B.BOOK_NO)
+		JOIN BOOK_ORDER O ON (B.BASKET_SEQ = O.BASKET_SEQ)
+		WHERE O.USER_NO = ? 
+		AND O.STATUS IN(0,1) AND 
+		TITLE LIKE ? 
+		ORDER BY ORDER_DATE DESC, O.STATUS
+
+	</entry>
+	<entry key="cancelOrder">
+		UPDATE BOOK_ORDER SET STATUS = ?, CANCEL_DATE =
+		SYSDATE WHERE ORDER_SEQ = ?
+	</entry>
+
+	<entry key="selectCancelList">
+		SELECT O.USER_NO, M.BOOK_NO, ORDER_SEQ, CANCEL_DATE, M.TITLE, PRICE, COUNT, O.STATUS
+		FROM BOOK_MASTER M
+		JOIN BASKET B ON (M.BOOK_NO = B.BOOK_NO)
+		JOIN
+		BOOK_ORDER O ON (B.BASKET_SEQ = O.BASKET_SEQ)
+		WHERE O.USER_NO = ?
+		AND
+		O.STATUS IN(2,3) ORDER BY
+		CANCEL_DATE DESC, O.STATUS
+
+	</entry>
+
+	<entry key="bookAddStock">
+
+		UPDATE BOOK_MASTER 
+		SET STOCK = STOCK + ?, 
+		SALE_COUNT = SALE_COUNT - ?
+		WHERE BOOK_NO = ?
+
+	</entry>
+	
+	<entry key="selectOrderCnt">
+		SELECT COUNT(1) AS CNT
+		FROM BOOK_MASTER M
+		JOIN BASKET B 
+		ON (M.BOOK_NO = B.BOOK_NO)
+		JOIN BOOK_ORDER O 
+		ON (B.BASKET_SEQ = O.BASKET_SEQ)
+		WHERE O.USER_NO = ?
+		AND   M.BOOK_NO = ?
+		AND   O.STATUS IN(0,1)
+	</entry>
+</properties>
+
+

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	
+	<comment>회원 관련 쿼리문들</comment>
+	
+
+	<entry key="insertInquiry">
+		INSERT INTO INQUIRY(INQUIRY_SEQ, USER_NO, INQUIRY_DATE, INQUIRY_CLASS, INQUIRY_EMAIL,INQUIRY_TITLE ,INQUIRY_CONTENT)
+		VALUES(SEQ_UNO.NEXTVAL, ?, SYSDATE, ?, ?,?,?)
+	</entry>
+	
+	<entry key="selectListCount">
+		SELECT COUNT(*) COUNT
+		FROM INQUIRY
+		WHERE INQUIRY_STATUS = 'Y'
+		  AND USER_NO = ?
+	</entry>
+	
+	<entry key="selectList">
+	
+		
+		SELECT *
+		FROM (
+				SELECT (ROW_NUMBER() OVER (ORDER BY INQUIRY_DATE DESC)) AS LISTNUM
+				        ,INQUIRY_TITLE,ANSWER_STATUS,INQUIRY_DATE
+				FROM INQUIRY
+				WHERE USER_NO = ?
+				AND  INQUIRY_STATUS = 'Y')
+		WHERE LISTNUM BETWEEN ? AND ?
+		
+	</entry>
+	
+	<entry key="selectInquiry">
+	
+		
+			SELECT *
+		FROM (
+				SELECT  A.* ,(ROW_NUMBER() OVER (ORDER BY INQUIRY_DATE DESC)) AS LISTNUM
+				FROM INQUIRY A
+				WHERE USER_NO = ?
+				AND  INQUIRY_STATUS = 'Y')
+		WHERE LISTNUM = ?
+		
+	</entry>
+	
+	<entry key="selectListCountAdmin">
+		SELECT COUNT(*) AS COUNT FROM INQUIRY
+	
+	</entry>
+	
+	<entry key="selectListAdmin">
+		  SELECT *
+		FROM (
+		    SELECT ROWNUM RNUM, A.*
+		    FROM (SELECT USER_NO,INQUIRY_TITLE,ANSWER_STATUS,INQUIRY_DATE
+                  FROM INQUIRY
+				  WHERE  INQUIRY_STATUS = 'Y'
+                  ORDER BY INQUIRY_DATE DESC )A)
+		WHERE RNUM BETWEEN ? AND ?
+	
+	</entry>
+	
+	
+	<entry key="selectInquiryAdmin">
+
+	
+	 SELECT m.USER_NAME,I.*
+		 FROM MEMBER m
+    	,INQUIRY i
+	 WHERE m.USER_NO = i.USER_NO
+		AND i.INQUIRY_TITLE = ?
+		AND i.USER_NO= ?
+		AND  INQUIRY_STATUS = 'Y'
+	</entry>
+	
+	<entry key="insertAn">
+	  UPDATE INQUIRY
+
+	  SET  ANSWER_STATUS ='Y',ANSWER = ?
+
+      WHERE USER_NO = ?
+      AND INQUIRY_TITLE = ?
+	
+	
+	</entry>
+	
+	
+	
+</properties>

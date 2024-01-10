@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>댓글 관련 쿼리문들</comment>
+
+	<entry key="selectComment">
+		SELECT CMENT_SEQ, USER_ID, CMENT, CMENT_DATE
+		FROM CMENT C
+		JOIN MEMBER M ON (C.USER_NO = M.USER_NO)
+		WHERE BOOK_NO = ?
+		ORDER BY CMENT_DATE DESC
+	</entry>
+	<entry key="insertComment">
+		INSERT INTO CMENT(CMENT_SEQ, USER_NO, BOOK_NO, CMENT)
+	    VALUES(SEQ_COM.NEXTVAL, ?, ?, ?)
+	</entry>
+	
+</properties>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	<entry key="selectBasket">
+		SELECT BASKET_SEQ, B.BOOK_NO, USER_NO,BM.BOOK_TITLE BTITLE , BM.PRICE BPRICE, COUNT, BM.PRICE*COUNT SUMPRICE
+		  FROM BASKET B
+		  JOIN BOOK_MASTER BM ON (B.BOOK_NO = BM.BOOK_NO)
+		 WHERE USER_NO = ?
+	       AND B.STATUS = 'Y'
+	</entry>
+	
+	<entry key="insertBook">
+		INSERT INTO BASKET (BASKET_SEQ, BOOK_NO, USER_NO, COUNT, STATUS)
+		VALUES(SEQ_BAS.NEXTVAL, ?, ?, ?, 'Y')
+	</entry>
+	
+	<entry key="selectAttachment">
+		SELECT KEY, ORIGIN_NAME, CHANGE_NAME, FILE_PATH
+		  FROM ATTACHMENT
+		 WHERE BOOK_NO = ?
+		   AND STATUS = 'Y'
+	</entry>
+	
+	<entry key="deleteBasket">
+		UPDATE BASKET
+		SET STATUS = 'N'
+		WHERE BASKET_SEQ = ?
+	</entry>
+	
+	<entry key="selectBasketImg">
+		SELECT BASKET_SEQ, B.BOOK_NO, USER_NO,BM.TITLE BTITLE , BM.PRICE BPRICE, COUNT, BM.PRICE*COUNT SUMPRICE, FILE_PATH || CHANGE_NAME "TITLEIMG"
+		  FROM BASKET B
+		  JOIN BOOK_MASTER BM ON (B.BOOK_NO = BM.BOOK_NO)
+		  JOIN ATTACHMENT A ON (B.BOOK_NO = A.BOOK_NO)
+		 WHERE B.STATUS = 'Y'
+		   AND USER_NO = ?
+	</entry>
+
+</properties>
